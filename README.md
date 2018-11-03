@@ -1,1 +1,2 @@
 # LobbyCore
+### Shitty lobby plugin :)

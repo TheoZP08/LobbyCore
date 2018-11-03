@@ -33,7 +33,7 @@ class EventListener implements Listener
     {
         $player = $event->getPlayer();
         if (!$player->isOp()) {
-            $event->setCancelled(true)
+            $event->setCancelled(true);
         }
     }
 
@@ -41,7 +41,7 @@ class EventListener implements Listener
     {
         $player = $event->getPlayer();
         if (!$player->isOp()) {
-            $event->setCancelled(true)
+            $event->setCancelled(true);
         }
     }
 

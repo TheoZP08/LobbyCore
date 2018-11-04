@@ -1,15 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: XFizzer
- * Date: 11/3/2018
- * Time: 12:04 PM
- */
 
 namespace XFizzer;
 
 use pocketmine\plugin\PluginBase;
 use pocketmine\event\Listener;
+use XFizzer\Commands\Hub;
 use XFizzer\Events\EventListener;
 
 class Main extends PluginBase implements Listener
@@ -28,7 +23,7 @@ class Main extends PluginBase implements Listener
 
     public function onDisable()
     {
-        $this->getLogger()->info('');
+        $this->getLogger()->info('LobbyCore disabled');
     }
 
     public function Events()
@@ -38,6 +33,6 @@ class Main extends PluginBase implements Listener
 
     public function Commands()
     {
-
+        $this->getServer()->getCommandMap()->register("hub", new Hub($this));
     }
 }

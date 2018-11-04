@@ -12,6 +12,10 @@ class Hub extends Command
 {
     private $plugin;
 
+    /**
+     * Hub constructor.
+     * @param Main $plugin
+     */
     public function __construct(Main $plugin)
     {
         $this->plugin = $plugin;

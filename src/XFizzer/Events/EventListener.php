@@ -7,6 +7,7 @@ use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerDropItemEvent;
 use pocketmine\event\player\PlayerExhaustEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerJoinEvent;
@@ -101,6 +102,17 @@ class EventListener implements Listener
     public function onDamage(EntityDamageEvent $event)
     {
         if ($event->getCause() == EntityDamageEvent::CAUSE_FALL) {
+            $event->setCancelled(true);
+        }
+    }
+
+    /**
+     * @param PlayerDropItemEvent $event
+     */
+    public function onDrop(PlayerDropItemEvent $event)
+    {
+        $player = $event->getPlayer();
+        if (!$player->isOp()) {
             $event->setCancelled(true);
         }
     }

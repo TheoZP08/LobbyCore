@@ -26,7 +26,7 @@ class API
         $inv = $player->getInventory();
         $player->getInventory()->clearAll();
         $inv->setItem(0, Item::get(Item::COMPASS)->setCustomName("Servers"));
-        $inv->setItem(1, Item::get(Item::FEATHER)->setCustomName("Leap"));
+        $inv->setItem(4, Item::get(Item::FEATHER)->setCustomName("Leap"));
         $inv->setItem(8, Item::get(Item::DYE, 10)->setCustomName("Player Visibility: on"));
     }
 

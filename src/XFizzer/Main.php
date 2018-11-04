@@ -23,6 +23,7 @@ class Main extends PluginBase implements Listener
     {
         $this->getLogger()->info('LobbyCore by XFizzer loaded');
         $this->Events();
+        $this->Commands();
     }
 
     public function onDisable()
@@ -33,5 +34,10 @@ class Main extends PluginBase implements Listener
     public function Events()
     {
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
+    }
+
+    public function Commands()
+    {
+
     }
 }

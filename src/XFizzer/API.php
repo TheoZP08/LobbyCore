@@ -3,17 +3,24 @@
 namespace XFizzer;
 
 use pocketmine\level\sound\BlazeShootSound;
+use pocketmine\item\Item;
 use pocketmine\Player;
 
 class API
 {
     public static $main;
 
+    /**
+     * @return int
+     */
     public static function speed()
     {
         return -2;
     }
 
+    /**
+     * @param Player $player
+     */
     public static function lobbyItems(Player $player)
     {
         $inv = $player->getInventory();
@@ -23,6 +30,10 @@ class API
         $inv->setItem(8, Item::get(Item::DYE, 10)->setCustomName("Player Visibility: on"));
     }
 
+    /**
+     * @param Player $player
+     * @param int $base
+     */
     public static function launch(Player $player, $base = 1)
     {
         $player->getLevel()->addSound(new BlazeShootSound($player));

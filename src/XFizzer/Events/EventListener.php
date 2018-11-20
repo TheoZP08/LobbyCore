@@ -123,12 +123,4 @@ class EventListener implements Listener
             $event->setCancelled(true);
         }
     }
-
-    /**
-     * @param EntityDamageEvent $event
-     */
-    public function onDamage(EntityDamageEvent $event)
-    {
-        $event->setCancelled(true);
-    }
 }

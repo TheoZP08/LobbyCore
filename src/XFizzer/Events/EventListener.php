@@ -11,6 +11,7 @@ use pocketmine\event\player\PlayerDropItemEvent;
 use pocketmine\event\player\PlayerExhaustEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerJoinEvent;
+use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\item\Item;
 use XFizzer\API;
 
@@ -33,6 +34,12 @@ class EventListener implements Listener
             $player->sendMessage('Welcome ' . $name);
             API::$main->getServer()->broadcastMessage($name . " has joined for the first time!!!");
         }
+    }
+
+    public function onQuit(PlayerQuitEvent $event)
+    {
+        $player = $event->getPlayer();
+        $event->setQuitMessage("");
     }
 
     /**
@@ -115,5 +122,13 @@ class EventListener implements Listener
         if (!$player->isOp()) {
             $event->setCancelled(true);
         }
+    }
+
+    /**
+     * @param EntityDamageEvent $event
+     */
+    public function onDamage(EntityDamageEvent $event)
+    {
+        $event->setCancelled(true);
     }
 }

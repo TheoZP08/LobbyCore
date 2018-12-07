@@ -7,6 +7,7 @@ use pocketmine\Player;
 use pocketmine\scheduler\Task;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat as TF;
+use XFizzer\Stats\Stats;
 
 class UpdateScoreboardTask extends Task
 {
@@ -26,9 +27,11 @@ class UpdateScoreboardTask extends Task
         if (!$this->player->isOnline()) {
             $this->getHandler()->cancel();
         }
+
+        $tokens = Stats::getTokens($this->player);
+
         $scoreboard = $this->scoreboard;
         $scoreboard->setLine($this->player, 0, 'Online: ' . count(Server::getInstance()->getOnlinePlayers()));
-        $scoreboard->setLine($this->player, 2, 'Tokens: ');
-        $scoreboard->setLine($this->player, 4, TF::GRAY . date('Y/m/d H:i:s'));
+        $scoreboard->setLine($this->player, 2, 'Tokens: ' . $tokens);
     }
 }

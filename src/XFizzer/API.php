@@ -2,8 +2,8 @@
 
 namespace XFizzer;
 
-use pocketmine\level\sound\BlazeShootSound;
 use pocketmine\item\Item;
+use pocketmine\level\sound\BlazeShootSound;
 use pocketmine\Player;
 
 class API

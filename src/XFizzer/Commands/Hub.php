@@ -31,9 +31,9 @@ class Hub extends Command
     public function execute(CommandSender $sender, string $commandLabel, array $args)
     {
         if ($sender instanceof Player) {
-            $x = 15;
-            $y = 75;
-            $z = 196;
+            $x = -1880;
+            $y = 61;
+            $z = -122;
             $level = $this->plugin->getServer()->getLevelByName("world");
             $pos = new Position($x, $y, $z, $level);
             $sender->teleport($pos);

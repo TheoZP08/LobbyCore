@@ -2,6 +2,7 @@
 
 namespace XFizzer\Events;
 
+use Miste\scoreboardspe\API\{Scoreboard, ScoreboardAction, ScoreboardDisplaySlot, ScoreboardSort};
 use pocketmine\entity\Attribute;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\BlockPlaceEvent;
@@ -12,14 +13,12 @@ use pocketmine\event\player\PlayerExhaustEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerQuitEvent;
+use pocketmine\event\player\PlayerRespawnEvent;
 use pocketmine\item\Item;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat as TF;
 use XFizzer\API;
 use XFizzer\Main;
-use Miste\scoreboardspe\API\{
-    Scoreboard, ScoreboardDisplaySlot, ScoreboardSort, ScoreboardAction
-};
 use XFizzer\Task\UpdateScoreboardTask;
 
 class EventListener implements Listener
@@ -145,12 +144,21 @@ class EventListener implements Listener
     }
 
     /**
+     * @param PlayerRespawnEvent $event
+     */
+    public function onRespawn(PlayerRespawnEvent $event)
+    {
+        $player = $event->getPlayer();
+        API::lobbyItems($player);
+    }
+
+    /**
      * @param Player $player
      * @var Scoreboard $scoreboard
      */
     public function scoreBoard(Player $player)
     {
-        $scoreboard = new Scoreboard($this->plugin->getServer()->getPluginManager()->getPlugin("ScoreboardsPE")->getPlugin(), TF::GREEN . "-- SkyBlockPE --", ScoreboardAction::CREATE);
+        $scoreboard = new Scoreboard($this->plugin->getServer()->getPluginManager()->getPlugin("ScoreboardsPE")->getPlugin(), TF::GREEN . "- Unnamed -", ScoreboardAction::CREATE);
         $scoreboard->create(ScoreboardDisplaySlot::SIDEBAR, ScoreboardSort::DESCENDING);
         $scoreboard->addDisplay($player, ScoreboardDisplaySlot::SIDEBAR, ScoreboardSort::ASCENDING);
         $this->plugin->getScheduler()->scheduleRepeatingTask(new UpdateScoreboardTask($scoreboard, $player), 20);

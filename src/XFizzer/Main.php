@@ -2,13 +2,17 @@
 
 namespace XFizzer;
 
-use pocketmine\plugin\PluginBase;
 use pocketmine\event\Listener;
+use pocketmine\plugin\PluginBase;
+use pocketmine\utils\Config;
 use XFizzer\Commands\Hub;
 use XFizzer\Events\EventListener;
+use XFizzer\Stats\StatsListener;
 
 class Main extends PluginBase implements Listener
 {
+    public $stats;
+
     public function onLoad(): void
     {
         API::$main = $this;
@@ -19,6 +23,9 @@ class Main extends PluginBase implements Listener
         $this->getLogger()->info('LobbyCore by XFizzer loaded');
         $this->Events();
         $this->Commands();
+
+        $this->stats = new Config($this->getDataFolder() . "stats.yml", Config::YAML, array());
+        if (!is_dir($this->getDataFolder())) mkdir($this->getDataFolder());
     }
 
     public function onDisable()
@@ -29,6 +36,7 @@ class Main extends PluginBase implements Listener
     public function Events()
     {
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
+        $this->getServer()->getPluginManager()->registerEvents(new StatsListener($this), $this);
     }
 
     public function Commands()

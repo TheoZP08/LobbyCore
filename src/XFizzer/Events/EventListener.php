@@ -13,9 +13,14 @@ use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\item\Item;
+use pocketmine\Player;
 use pocketmine\utils\TextFormat as TF;
 use XFizzer\API;
 use XFizzer\Main;
+use Miste\scoreboardspe\API\{
+    Scoreboard, ScoreboardDisplaySlot, ScoreboardSort, ScoreboardAction
+};
+use XFizzer\Task\UpdateScoreboardTask;
 
 class EventListener implements Listener
 {
@@ -39,6 +44,7 @@ class EventListener implements Listener
         $name = $player->getName();
         $event->setJoinMessage("");
         API::lobbyItems($player);
+        $this->scoreboard($player);
         //Player Speed
         $speed = $player->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
         $speed->setValue($speed->getValue() / (1 + 0.2 * API::speed()));
@@ -136,5 +142,17 @@ class EventListener implements Listener
         if (!$player->isOp()) {
             $event->setCancelled(true);
         }
+    }
+
+    /**
+     * @param Player $player
+     * @var Scoreboard $scoreboard
+     */
+    public function scoreBoard(Player $player)
+    {
+        $scoreboard = new Scoreboard($this->plugin->getServer()->getPluginManager()->getPlugin("ScoreboardsPE")->getPlugin(), TF::GREEN . "-- SkyBlockPE --", ScoreboardAction::CREATE);
+        $scoreboard->create(ScoreboardDisplaySlot::SIDEBAR, ScoreboardSort::DESCENDING);
+        $scoreboard->addDisplay($player, ScoreboardDisplaySlot::SIDEBAR, ScoreboardSort::ASCENDING);
+        $this->plugin->getScheduler()->scheduleRepeatingTask(new UpdateScoreboardTask($scoreboard, $player), 20);
     }
 }

@@ -6,6 +6,7 @@ use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\level\Position;
 use pocketmine\Player;
+use pocketmine\utils\TextFormat as TF;
 use XFizzer\Main;
 
 class Hub extends Command
@@ -36,6 +37,7 @@ class Hub extends Command
             $level = $this->plugin->getServer()->getLevelByName("world");
             $pos = new Position($x, $y, $z, $level);
             $sender->teleport($pos);
+            $sender->sendMessage(TF::YELLOW . "You were teleported to hub.");
         }
     }
 }

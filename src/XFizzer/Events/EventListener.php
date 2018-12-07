@@ -13,6 +13,7 @@ use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\item\Item;
+use pocketmine\utils\TextFormat as TF;
 use XFizzer\API;
 
 class EventListener implements Listener
@@ -62,11 +63,13 @@ class EventListener implements Listener
                     foreach (API::$main->getServer()->getOnlinePLayers() as $pl) {
                         $player->hidePlayer($pl);
                     }
+                    $player->sendMessage(TF::RED . TF::BOLD . "(!) " . TF::RESET . TF::GRAY . "Players are now invisible.");
                     $inv->setItem(8, Item::get(Item::DYE, 8)->setCustomName("Player Visibility: off"));
                 } elseif ($hand->getDamage() === 8) {
                     foreach (API::$main->getServer()->getOnlinePLayers() as $pl) {
                         $player->showPlayer($pl);
                     }
+                    $player->sendMessage(TF::RED . TF::BOLD . "(!) " . TF::RESET . TF::GRAY . "Players are now visible.");
                     $inv->setItem(8, Item::get(Item::DYE, 10)->setCustomName("Player Visibility: on"));
                 }
                 break;

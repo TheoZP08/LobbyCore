@@ -15,9 +15,21 @@ use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\item\Item;
 use pocketmine\utils\TextFormat as TF;
 use XFizzer\API;
+use XFizzer\Main;
 
 class EventListener implements Listener
 {
+    private $plugin;
+
+    /**
+     * EventListener constructor.
+     * @param Main $plugin
+     */
+    public function __construct(Main $plugin)
+    {
+        $this->plugin = $plugin;
+    }
+
     /**
      * @param PlayerJoinEvent $event
      */
@@ -33,7 +45,7 @@ class EventListener implements Listener
 
         if (!$player->hasPlayedBefore()) {
             $player->sendMessage('Welcome ' . $name);
-            API::$main->getServer()->broadcastMessage($name . " has joined for the first time!!!");
+            $this->plugin->getServer()->broadcastMessage($name . " has joined for the first time!!!");
         }
     }
 
@@ -53,20 +65,19 @@ class EventListener implements Listener
         $hand = $inv->getItemInHand();
         switch ($hand->getId()) {
             case Item::COMPASS:
-                $player->sendMessage("coming soon");
                 break;
             case Item::FEATHER:
                 API::launch($player);
                 break;
             case Item::DYE:
                 if ($hand->getDamage() === 10) {
-                    foreach (API::$main->getServer()->getOnlinePLayers() as $pl) {
+                    foreach ($this->plugin->getServer()->getOnlinePLayers() as $pl) {
                         $player->hidePlayer($pl);
                     }
                     $player->sendMessage(TF::RED . TF::BOLD . "(!) " . TF::RESET . TF::GRAY . "Players are now invisible.");
                     $inv->setItem(8, Item::get(Item::DYE, 8)->setCustomName("Player Visibility: off"));
                 } elseif ($hand->getDamage() === 8) {
-                    foreach (API::$main->getServer()->getOnlinePLayers() as $pl) {
+                    foreach ($this->plugin->getServer()->getOnlinePLayers() as $pl) {
                         $player->showPlayer($pl);
                     }
                     $player->sendMessage(TF::RED . TF::BOLD . "(!) " . TF::RESET . TF::GRAY . "Players are now visible.");

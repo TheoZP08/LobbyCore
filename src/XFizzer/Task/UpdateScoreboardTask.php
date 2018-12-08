@@ -6,7 +6,6 @@ use Miste\scoreboardspe\API\Scoreboard;
 use pocketmine\Player;
 use pocketmine\scheduler\Task;
 use pocketmine\Server;
-use pocketmine\utils\TextFormat as TF;
 use XFizzer\Stats\Stats;
 
 class UpdateScoreboardTask extends Task

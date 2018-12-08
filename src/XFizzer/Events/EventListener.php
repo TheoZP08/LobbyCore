@@ -20,10 +20,12 @@ use pocketmine\utils\TextFormat as TF;
 use XFizzer\API;
 use XFizzer\Main;
 use XFizzer\Task\UpdateScoreboardTask;
+use XFizzer\UI\StatsUI;
 
 class EventListener implements Listener
 {
     private $plugin;
+    public $pvp = false;
 
     /**
      * EventListener constructor.
@@ -88,6 +90,19 @@ class EventListener implements Listener
                     $player->sendMessage(TF::RED . TF::BOLD . "(!) " . TF::RESET . TF::GRAY . "Players are now visible.");
                     $inv->setItem(8, Item::get(Item::DYE, 10)->setCustomName("Player Visibility: on"));
                 }
+                break;
+            case Item::DIAMOND_SWORD:
+                API::pvpItems($player);
+                $this->pvp = true;
+                $player->sendMessage("(!) You are now pvping!");
+                break;
+            case Item::STICK:
+                API::lobbyItems($player);
+                $this->pvp = false;
+                $player->sendMessage("(!) You are no longer pvping!");
+                break;
+            case Item::CHEST:
+                StatsUI::statsUI($player);
                 break;
         }
     }

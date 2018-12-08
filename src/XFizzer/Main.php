@@ -2,14 +2,13 @@
 
 namespace XFizzer;
 
-use pocketmine\event\Listener;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use XFizzer\Commands\Hub;
 use XFizzer\Events\EventListener;
 use XFizzer\Stats\StatsListener;
 
-class Main extends PluginBase implements Listener
+class Main extends PluginBase
 {
     public $stats;
 

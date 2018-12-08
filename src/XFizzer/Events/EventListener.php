@@ -6,7 +6,9 @@ use Miste\scoreboardspe\API\{Scoreboard, ScoreboardAction, ScoreboardDisplaySlot
 use pocketmine\entity\Attribute;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\BlockPlaceEvent;
+use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\event\entity\EntityDeathEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerDropItemEvent;
 use pocketmine\event\player\PlayerExhaustEvent;
@@ -19,11 +21,12 @@ use pocketmine\Player;
 use pocketmine\utils\TextFormat as TF;
 use XFizzer\API;
 use XFizzer\Main;
+use XFizzer\Stats\Stats;
 use XFizzer\Task\UpdateScoreboardTask;
 use XFizzer\UI\StatsUI;
 
-class EventListener implements Listener
-{
+class EventListener implements Listener {
+
     private $plugin;
     public $pvp = false;
 
@@ -31,16 +34,14 @@ class EventListener implements Listener
      * EventListener constructor.
      * @param Main $plugin
      */
-    public function __construct(Main $plugin)
-    {
+    public function __construct(Main $plugin) {
         $this->plugin = $plugin;
     }
 
     /**
      * @param PlayerJoinEvent $event
      */
-    public function onJoin(PlayerJoinEvent $event)
-    {
+    public function onJoin(PlayerJoinEvent $event) {
         $player = $event->getPlayer();
         $name = $player->getName();
         $event->setJoinMessage("");
@@ -56,8 +57,7 @@ class EventListener implements Listener
         }
     }
 
-    public function onQuit(PlayerQuitEvent $event)
-    {
+    public function onQuit(PlayerQuitEvent $event) {
         $player = $event->getPlayer();
         $event->setQuitMessage("");
     }
@@ -65,8 +65,7 @@ class EventListener implements Listener
     /**
      * @param PlayerInteractEvent $event
      */
-    public function onInteract(PlayerInteractEvent $event)
-    {
+    public function onInteract(PlayerInteractEvent $event) {
         $player = $event->getPlayer();
         $inv = $player->getInventory();
         $hand = $inv->getItemInHand();
@@ -110,8 +109,7 @@ class EventListener implements Listener
     /**
      * @param BlockPlaceEvent $event
      */
-    public function onBlockPlace(BlockPlaceEvent $event)
-    {
+    public function onBlockPlace(BlockPlaceEvent $event) {
         $player = $event->getPlayer();
         if (!$player->isOp()) {
             $event->setCancelled(true);
@@ -121,8 +119,7 @@ class EventListener implements Listener
     /**
      * @param BlockBreakEvent $event
      */
-    public function onBlockBreak(BlockBreakEvent $event)
-    {
+    public function onBlockBreak(BlockBreakEvent $event) {
         $player = $event->getPlayer();
         if (!$player->isOp()) {
             $event->setCancelled(true);
@@ -132,16 +129,14 @@ class EventListener implements Listener
     /**
      * @param PlayerExhaustEvent $event
      */
-    public function onExhaustEvent(PlayerExhaustEvent $event)
-    {
+    public function onExhaustEvent(PlayerExhaustEvent $event) {
         $event->setCancelled(true);
     }
 
     /**
      * @param EntityDamageEvent $event
      */
-    public function onDamage(EntityDamageEvent $event)
-    {
+    public function onDamage(EntityDamageEvent $event) {
         if ($event->getCause() == EntityDamageEvent::CAUSE_FALL) {
             $event->setCancelled(true);
         }
@@ -150,8 +145,7 @@ class EventListener implements Listener
     /**
      * @param PlayerDropItemEvent $event
      */
-    public function onDrop(PlayerDropItemEvent $event)
-    {
+    public function onDrop(PlayerDropItemEvent $event) {
         $player = $event->getPlayer();
         if (!$player->isOp()) {
             $event->setCancelled(true);
@@ -161,18 +155,29 @@ class EventListener implements Listener
     /**
      * @param PlayerRespawnEvent $event
      */
-    public function onRespawn(PlayerRespawnEvent $event)
-    {
+    public function onRespawn(PlayerRespawnEvent $event) {
         $player = $event->getPlayer();
         API::lobbyItems($player);
+    }
+
+    /**
+     * @param EntityDeathEvent $event
+     */
+    public function onDeath(EntityDeathEvent $event) {
+        Stats::addDeaths($event->getEntity());
+        if ($event->getEntity()->getLastDamageCause() instanceof EntityDamageByEntityEvent) {
+            $killer = $event->getEntity()->getLastDamageCause()->getDamager();
+            if ($killer instanceof Player) {
+                Stats::addKills($killer);
+            }
+        }
     }
 
     /**
      * @param Player $player
      * @var Scoreboard $scoreboard
      */
-    public function scoreBoard(Player $player)
-    {
+    public function scoreBoard(Player $player) {
         $scoreboard = new Scoreboard($this->plugin->getServer()->getPluginManager()->getPlugin("ScoreboardsPE")->getPlugin(), TF::GREEN . "- Unnamed -", ScoreboardAction::CREATE);
         $scoreboard->create(ScoreboardDisplaySlot::SIDEBAR, ScoreboardSort::DESCENDING);
         $scoreboard->addDisplay($player, ScoreboardDisplaySlot::SIDEBAR, ScoreboardSort::ASCENDING);

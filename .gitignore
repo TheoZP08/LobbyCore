@@ -9,3 +9,4 @@ src/XFizzer/Stats/Stats.php
 src/XFizzer/Stats/StatsListener.php
 src/XFizzer/Parkour/ParkourMain.php
 src/XFizzer/LobbyPvP/LobbyPvP.php
+.idea/codeStyles/codeStyleConfig.xml

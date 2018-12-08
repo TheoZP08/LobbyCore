@@ -9,16 +9,15 @@ use pocketmine\Player;
 use pocketmine\utils\TextFormat as TF;
 use XFizzer\Main;
 
-class Hub extends Command
-{
+class Hub extends Command {
+
     private $plugin;
 
     /**
      * Hub constructor.
      * @param Main $plugin
      */
-    public function __construct(Main $plugin)
-    {
+    public function __construct(Main $plugin) {
         $this->plugin = $plugin;
         parent::__construct("hub", "Go to Spawn", "Usage: /hub", ["spawn"]);
     }
@@ -28,8 +27,7 @@ class Hub extends Command
      * @param string $commandLabel
      * @param array $args
      */
-    public function execute(CommandSender $sender, string $commandLabel, array $args)
-    {
+    public function execute(CommandSender $sender, string $commandLabel, array $args) {
         if ($sender instanceof Player) {
             $x = -1880;
             $y = 61;

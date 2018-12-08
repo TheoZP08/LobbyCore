@@ -8,21 +8,19 @@ use pocketmine\scheduler\Task;
 use pocketmine\Server;
 use XFizzer\Stats\Stats;
 
-class UpdateScoreboardTask extends Task
-{
+class UpdateScoreboardTask extends Task {
+
     /* @var Scoreboard $scoreboard */
     private $scoreboard;
     /* @var Player $player */
     private $player;
 
-    public function __construct(Scoreboard $scoreboard, Player $player)
-    {
+    public function __construct(Scoreboard $scoreboard, Player $player) {
         $this->scoreboard = $scoreboard;
         $this->player = $player;
     }
 
-    public function onRun(int $currentTick)
-    {
+    public function onRun(int $currentTick) {
         if (!$this->player->isOnline()) {
             $this->getHandler()->cancel();
         }

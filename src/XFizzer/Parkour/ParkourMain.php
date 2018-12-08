@@ -2,7 +2,6 @@
 
 namespace XFizzer\Parkour;
 
-class ParkourMain
-{
+class ParkourMain {
     //todo
 }

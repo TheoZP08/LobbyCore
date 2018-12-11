@@ -10,6 +10,7 @@ use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityDeathEvent;
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerDropItemEvent;
 use pocketmine\event\player\PlayerExhaustEvent;
 use pocketmine\event\player\PlayerInteractEvent;
@@ -28,7 +29,7 @@ use XFizzer\UI\StatsUI;
 class EventListener implements Listener {
 
     private $plugin;
-    public $pvp = false;
+    private $pvp = [];
 
     /**
      * EventListener constructor.
@@ -92,13 +93,13 @@ class EventListener implements Listener {
                 break;
             case Item::DIAMOND_SWORD:
                 API::pvpItems($player);
-                $this->pvp = true;
                 $player->sendMessage("(!) You are now pvping!");
+                $this->pvp[] = $player->getName();
                 break;
             case Item::STICK:
                 API::lobbyItems($player);
-                $this->pvp = false;
                 $player->sendMessage("(!) You are no longer pvping!");
+                unset($this->pvp[array_search($player->getName(), $this->pvp)]);
                 break;
             case Item::CHEST:
                 StatsUI::statsUI($player);
@@ -134,15 +135,6 @@ class EventListener implements Listener {
     }
 
     /**
-     * @param EntityDamageEvent $event
-     */
-    public function onDamage(EntityDamageEvent $event) {
-        if ($event->getCause() == EntityDamageEvent::CAUSE_FALL) {
-            $event->setCancelled(true);
-        }
-    }
-
-    /**
      * @param PlayerDropItemEvent $event
      */
     public function onDrop(PlayerDropItemEvent $event) {
@@ -163,12 +155,31 @@ class EventListener implements Listener {
     /**
      * @param EntityDeathEvent $event
      */
-    public function onDeath(EntityDeathEvent $event) {
-        Stats::addDeaths($event->getEntity());
+    public function onDeath(PlayerDeathEvent $event) {
+        $event->setDrops([]);
+        Stats::addDeaths($event->getEntity(), 1);
+        unset($this->pvp[array_search($event->getEntity()->getName(), $this->pvp)]);
         if ($event->getEntity()->getLastDamageCause() instanceof EntityDamageByEntityEvent) {
             $killer = $event->getEntity()->getLastDamageCause()->getDamager();
             if ($killer instanceof Player) {
-                Stats::addKills($killer);
+                Stats::addKills($killer, 1);
+            }
+        }
+    }
+
+    /**
+     * @param EntityDamageEvent $event
+     */
+    public function onDamage(EntityDamageEvent $event) {
+        if ($event->getCause() == EntityDamageEvent::CAUSE_FALL) {
+            $event->setCancelled(true);
+        }
+
+        if ($event instanceof EntityDamageByEntityEvent) {
+            $killer = $event->getDamager();
+            if (!in_array($event->getEntity()->getName(), $this->pvp)) {
+                $killer->sendMessage("(!) You can't pvp with this person.");
+                $event->setCancelled(true);
             }
         }
     }

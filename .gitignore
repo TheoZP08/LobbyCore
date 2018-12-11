@@ -5,8 +5,9 @@
 .idea/modules.xml
 .idea/misc.xml
 .idea/LobbyCore.iml
+.idea/codeStyles/codeStyleConfig.xml
 src/XFizzer/Stats/Stats.php
 src/XFizzer/Stats/StatsListener.php
-src/XFizzer/Parkour/ParkourMain.php
 src/XFizzer/LobbyPvP/LobbyPvP.php
-.idea/codeStyles/codeStyleConfig.xml
+src/XFizzer/Parkour/Command/ParkourCommand.php
+src/XFizzer/Parkour/Parkour.php

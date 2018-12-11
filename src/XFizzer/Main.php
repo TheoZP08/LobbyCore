@@ -6,6 +6,7 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use XFizzer\Commands\Hub;
 use XFizzer\Events\EventListener;
+use XFizzer\Parkour\Command\ParkourCommand;
 use XFizzer\Stats\StatsListener;
 
 class Main extends PluginBase {
@@ -36,5 +37,6 @@ class Main extends PluginBase {
 
     public function Commands() {
         $this->getServer()->getCommandMap()->register("hub", new Hub($this));
+        $this->getServer()->getCommandMap()->register("parkour", new ParkourCommand($this));
     }
 }

@@ -12,14 +12,16 @@ class API {
     /**
      * @return int
      */
-    public static function speed() {
+    public static function speed() 
+    {
         return -2;
     }
 
     /**
      * @param Player $player
      */
-    public static function lobbyItems(Player $player) {
+    public static function lobbyItems(Player $player) 
+    {
         $inv = $player->getInventory();
         $player->getArmorInventory()->clearAll();
         $player->getInventory()->clearAll();
@@ -33,7 +35,8 @@ class API {
     /**
      * @param Player $player
      */
-    public static function pvpItems(Player $player) {
+    public static function pvpItems(Player $player) 
+    {
         $inv = $player->getInventory();
         $player->getInventory()->clearAll();
         $inv->setItem(0, Item::get(Item::DIAMOND_SWORD));
@@ -49,7 +52,8 @@ class API {
      * @param Player $player
      * @param int $base
      */
-    public static function launch(Player $player, $base = 1) {
+    public static function launch(Player $player, $base = 1) 
+    {
         $player->getLevel()->addSound(new BlazeShootSound($player));
         switch ($player->getDirection()) {
             case 0:

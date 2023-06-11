@@ -1,5 +1,8 @@
+---
 name: LobbyCore
+version: 3.0.1
 main: XFizzer\Main
-author: XFizzer
-version: 1.0.0
-api: [3.0.0]
+api:
+- 5.0.0
+author: NhanAZ
+...

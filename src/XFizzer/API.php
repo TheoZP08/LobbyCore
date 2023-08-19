@@ -4,23 +4,19 @@ namespace XFizzer;
 
 use pocketmine\item\Item;
 use pocketmine\level\sound\BlazeShootSound;
-use pocketmine\Player;
+use pocketmine\player\Player;
+use pocketmine\entity\Entity;
+use pocketmine\math\Vector3;
 
 class API {
     public static $main;
 
-    /**
-     * @return int
-     */
-    public static function speed() 
+    public static function speed(): int 
     {
         return -2;
     }
 
-    /**
-     * @param Player $player
-     */
-    public static function lobbyItems(Player $player) 
+    public static function lobbyItems(Player $player): void 
     {
         $inv = $player->getInventory();
         $player->getArmorInventory()->clearAll();
@@ -32,10 +28,7 @@ class API {
         $inv->setItem(8, Item::get(Item::DYE, 10)->setCustomName("Player Visibility: on"));
     }
 
-    /**
-     * @param Player $player
-     */
-    public static function pvpItems(Player $player) 
+    public static function pvpItems(Player $player): void 
     {
         $inv = $player->getInventory();
         $player->getInventory()->clearAll();
@@ -48,26 +41,24 @@ class API {
         $player->getArmorInventory()->setBoots(Item::get(Item::IRON_BOOTS));
     }
 
-    /**
-     * @param Player $player
-     * @param int $base
-     */
-    public static function launch(Player $player, $base = 1) 
+    public static function launch(Player $player, int $base = 1): void 
     {
         $player->getLevel()->addSound(new BlazeShootSound($player));
+        $knockback = Entity::createEntity("minecraft:marker", $player->getLevel(), Entity::createBaseNBT($player));
         switch ($player->getDirection()) {
-            case 0:
-                $player->knockBack($player, 0, 1, 0, $base);
+            case Player::DIRECTION_NORTH:
+                $knockback->setMotion(new Vector3(0, $base, -$base));
                 break;
-            case 1:
-                $player->knockBack($player, 0, 0, 1, $base);
+            case Player::DIRECTION_SOUTH:
+                $knockback->setMotion(new Vector3(0, $base, $base));
                 break;
-            case 2:
-                $player->knockBack($player, 0, -1, 0, $base);
+            case Player::DIRECTION_WEST:
+                $knockback->setMotion(new Vector3(-$base, $base, 0));
                 break;
-            case 3:
-                $player->knockBack($player, 0, 0, -1, $base);
+            case Player::DIRECTION_EAST:
+                $knockback->setMotion(new Vector3($base, $base, 0));
                 break;
         }
+        $knockback->spawnToAll();
     }
 }

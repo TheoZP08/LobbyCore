@@ -13,14 +13,14 @@ class Main extends PluginBase {
 
     public function onEnable(): void {
         $this->getLogger()->info('LobbyCore by XFizzer loaded');
-        $this->Events();
+        $this->registerEvents();
     }
 
-    public function onDisable() {
+    public function onDisable(): void {
         $this->getLogger()->info('LobbyCore disabled');
     }
 
-    public function Events() {
+    public function registerEvents(): void {
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
     }
 }
